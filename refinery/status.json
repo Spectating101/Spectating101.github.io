@@ -3,7 +3,7 @@
   "project": "Refinery",
   "candidate": "2026Q3-closure-v1",
   "surface": "public_read_only_review",
-  "state": "EXTERNAL_REVIEW_SURFACE_PUBLISHED",
+  "state": "EXTERNAL_REVIEW_SURFACE_DEPLOYED",
   "proven": {
     "frozen_internal_research_baseline": true,
     "capability_implementation_claim_model": true,
@@ -13,7 +13,18 @@
     "artifact_scoped_anti_laundering_rule": true,
     "measured_public_build_vs_reuse_control": true,
     "license_authorized_curated_asset_reuse_comparison": true,
-    "independent_public_uv_oci_slsa_verification": true
+    "independent_public_uv_oci_slsa_verification": true,
+    "github_pages_build_and_deployment": true
+  },
+  "deployment": {
+    "url": "https://spectating101.github.io/refinery/",
+    "source_commit": "8133f024e8478b89253f6213ab5825348e2a8ac0",
+    "pages_workflow_run": 33059477623,
+    "build_job": 98474400936,
+    "deploy_job": 98474515982,
+    "build_conclusion": "success",
+    "deploy_conclusion": "success",
+    "boundary": "Platform deployment is proven. Cold-human comprehension, outside use, adoption and value remain separate evidence gates."
   },
   "public_uv_verification": {
     "artifact": "ghcr.io/astral-sh/uv:0.12.3-python3.13-trixie-slim",
@@ -50,7 +61,6 @@
   "pending": {
     "private_exact_head_execution": true,
     "private_refinery_uv_adapter_ingestion": true,
-    "served_pages_url_independently_verified": true,
     "cold_external_reviewer_packet": true,
     "bounded_outside_use": true,
     "outside_verdict_or_outcome": true,
@@ -60,6 +70,7 @@
     "The frozen internal baseline remains unchanged; the PSL experiment is post-baseline evidence.",
     "The PSL comparison is rights-authorized through published MPL-2.0/CC0 terms, not through direct supplier contact.",
     "Its 100% versus 50% result proves only a bounded correctness advantage attributable to the pinned curated suffix asset on the official corpus.",
+    "A successful GitHub Pages deployment does not establish a human visitor, adoption, recommendation, external value or product-market fit.",
     "Verified provenance is not software correctness, adoption, recommendation, external value, product-market fit, or reuse permission beyond the applicable license.",
     "The RFC control remains a negative internal control and is not relabeled as outside-user evidence.",
     "This reviewer surface exposes no private repository source or private research data.",
