@@ -22,6 +22,7 @@
     .check input { width:auto; margin-top:4px; }
     button { margin-top:20px; padding:12px 16px; border:0; border-radius:10px; font-weight:800; cursor:pointer; }
     .boundary { font-size:13px; color:#93a0b3; }
+    .return { margin-top:18px; padding-top:16px; border-top:1px solid #28364a; }
     #status { margin-top:12px; color:#a8d9b7; }
   </style>
 </head>
@@ -29,7 +30,7 @@
 <main>
   <div class="eyebrow">Refinery · cold external comprehension</div>
   <h1>Record what you understood without maintainer help.</h1>
-  <p>Spend no more than five minutes on the <a href="index.html">review surface</a>, then complete this packet. This page performs no network submission. It only downloads a JSON file to your device.</p>
+  <p>Spend no more than five minutes on the <a href="index.html">review surface</a>, then complete this packet. This form itself performs no network submission. It only downloads a JSON file to your device.</p>
 
   <form id="reviewForm">
     <section>
@@ -80,6 +81,9 @@
       <p class="boundary">Authority boundary: this packet records comprehension and opinion only. It is not an external submission, recommendation, evidence-maturity promotion, reuse authorization, or product-value claim.</p>
       <button type="submit">Export review packet</button>
       <div id="status" role="status" aria-live="polite"></div>
+      <div class="return">
+        <p class="boundary">Optional public return path: after reviewing, you may <a href="https://github.com/Spectating101/Spectating101.github.io/issues/new?template=refinery-cold-review.yml" rel="noopener noreferrer">submit a Refinery cold-review issue on GitHub</a>. That action leaves this site and creates a public GitHub issue; do not include private or sensitive information.</p>
+      </div>
     </section>
   </form>
 </main>
@@ -121,7 +125,7 @@
     link.click();
     link.remove();
     setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    $('status').textContent = 'Packet exported locally. Send the JSON file back to the maintainer if you choose.';
+    $('status').textContent = 'Packet exported locally. You can keep it private or use the optional public GitHub return path below.';
   });
 </script>
 </body>
