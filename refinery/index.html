@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Refinery 2026Q3 external review surface: capability identity, exact implementations, scoped evidence, and bounded reuse decisions." />
+  <title>Refinery — External Review</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:#090d13; color:#edf2f7; }
+    a { color:#bcd0ff; }
+    main { max-width:1040px; margin:0 auto; padding:56px 22px 96px; }
+    .eyebrow { color:#8c9ab0; text-transform:uppercase; letter-spacing:.14em; font-size:12px; }
+    h1 { font-size:clamp(42px,8vw,78px); line-height:.98; margin:10px 0 18px; max-width:900px; }
+    h2 { margin:0 0 12px; font-size:27px; }
+    h3 { margin:0 0 8px; font-size:17px; }
+    p { line-height:1.65; color:#c7d0dc; }
+    .lede { font-size:20px; max-width:820px; }
+    .tag { display:inline-block; padding:6px 10px; border:1px solid #334159; border-radius:999px; color:#b7c3d6; margin:0 6px 8px 0; font-size:13px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:18px; }
+    .card { border:1px solid #263247; background:#101722; border-radius:14px; padding:18px; }
+    section { margin-top:48px; }
+    .model { white-space:pre; overflow:auto; border:1px solid #27344a; border-radius:14px; padding:18px; background:#0d131d; color:#dae5f4; line-height:1.55; }
+    .ok { color:#9ed8af; }
+    .pending { color:#f2c889; }
+    .boundary { color:#9ba8ba; font-size:14px; }
+    .evidence { width:100%; border-collapse:collapse; margin-top:16px; }
+    .evidence th,.evidence td { border-bottom:1px solid #273246; padding:12px 8px; text-align:left; vertical-align:top; }
+    .evidence th { color:#98a8bd; font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
+    .cta { display:flex; flex-wrap:wrap; gap:12px; margin-top:22px; }
+    .button { display:inline-block; text-decoration:none; padding:12px 15px; border-radius:10px; font-weight:750; background:#e9eef7; color:#101722; }
+    .button.secondary { background:transparent; color:#dbe5f4; border:1px solid #3b4960; }
+    footer { margin-top:64px; padding-top:22px; border-top:1px solid #232e40; color:#8492a6; font-size:13px; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Refinery · 2026Q3 external review</div>
+  <h1>Capabilities are cheap to generate. Evidence is not.</h1>
+  <p class="lede">Refinery is an evidence-grounded capability commons. It separates the behavior being sought, the exact realization that provides it, the evidence attached to that realization, and the authority to recommend or reuse it.</p>
+  <div>
+    <span class="tag">Capability identity</span><span class="tag">Exact implementations</span><span class="tag">Scoped evidence</span><span class="tag">Negative results preserved</span><span class="tag">Read-only review</span>
+  </div>
+
+  <div class="cta">
+    <a class="button" href="review.html">Run the 5-minute cold review</a>
+    <a class="button secondary" href="status.json">Inspect machine-readable status</a>
+  </div>
+
+  <section>
+    <h2>The model</h2>
+    <div class="model">source / observation / demand
+              │
+              ▼
+      explicit semantic review
+              │
+              ▼
+        Capability Capsule
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+Implementation A  Implementation B
+       │             │
+       ▼             ▼
+ scoped evidence   scoped evidence
+       └──────┬──────┘
+              ▼
+     evidence maturity
+              │
+       DOES NOT imply
+       recommendation
+              │
+              ▼
+   explicit curation / authority</div>
+    <p><strong>Invariant:</strong> evidence about subject X does not silently become evidence about related subject Y.</p>
+  </section>
+
+  <section>
+    <h2>What has actually been demonstrated</h2>
+    <div class="grid">
+      <div class="card"><h3 class="ok">Capability ≠ implementation</h3><p>One semantic capability can have multiple pinned Git, OCI, or other concrete realizations without collapsing their evidence together.</p></div>
+      <div class="card"><h3 class="ok">Anti-laundering boundary</h3><p>A real design defect was found where project-level provenance could contaminate sibling implementations. The evidence model now requires exact subject binding.</p></div>
+      <div class="card"><h3 class="ok">Heterogeneous fit</h3><p>LangGraph, tldraw, and uv were represented without changing the Commons kernel schema.</p></div>
+      <div class="card"><h3 class="ok">Cross-domain fit</h3><p>The same capability → implementation → claim grammar survived a real conservation/institutional case without inventing a universal institution object.</p></div>
+      <div class="card"><h3 class="ok">Citation Engine bridge</h3><p>Compiled Commons objects can be consumed by a separate neutral evidence/authority substrate without folding the projects together.</p></div>
+      <div class="card"><h3 class="ok">Negative controls survive</h3><p>Refinery retains adverse results instead of forcing a reuse or commercialization win.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two falsifiable evidence points</h2>
+    <table class="evidence">
+      <thead><tr><th>Test</th><th>Observed result</th><th>What it does not prove</th></tr></thead>
+      <tbody>
+        <tr><td>RFC 3986 build-vs-reuse control</td><td><strong>Reuse 42/42; clean-room rebuild 42/42.</strong><br/>Verdict: <code>DOWNGRADE_GENERIC_CAPABILITY_NO_REUSE_ADVANTAGE_ESTABLISHED</code>.</td><td>Not an outside-user or supplier-authorized experiment; no general economic conclusion.</td></tr>
+        <tr><td>Independent uv OCI/SLSA verification</td><td><strong>PASS.</strong> The pinned uv tag resolved to the predeclared SHA-256 digest and 2 SLSA attestations cryptographically verified against that exact subject.</td><td>Not software correctness, adoption, recommendation, value, PMF, or reuse rights; private Refinery adapter ingestion is separate.</td></tr>
+      </tbody>
+    </table>
+    <p class="boundary">Public uv validation record: <a href="https://github.com/Spectating101/citation-engine/pull/10">Citation Engine validation PR #10</a>. The validation harness was closed without merge after producing its execution record.</p>
+  </section>
+
+  <section>
+    <h2>What is deliberately still unproved</h2>
+    <div class="grid">
+      <div class="card"><h3 class="pending">Cold reviewer comprehension</h3><p>No outside reviewer packet is counted until an actual reviewer completes the supplied protocol.</p></div>
+      <div class="card"><h3 class="pending">Outside use / outcome</h3><p>A running interface is not adoption. A real outside event and scoped verdict/outcome must be recorded.</p></div>
+      <div class="card"><h3 class="pending">Authorized economic comparison</h3><p>The stronger reuse-vs-rebuild test requires genuine owner/supplier authorization; public availability is not permission.</p></div>
+      <div class="card"><h3 class="pending">Product-market fit</h3><p>No evidence maturity state, benchmark, or attestation is allowed to manufacture market value.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cold-review instruction</h2>
+    <p>Spend no more than five minutes on this page. Do not ask the maintainer for interpretation. Then complete the review packet. The form sends nothing over the network; it downloads a JSON file locally. A genuine packet can later be hashed and ingested as external usage + verdict evidence without promoting recommendation or maturity.</p>
+    <a class="button" href="review.html">Start reviewer packet</a>
+  </section>
+
+  <footer>This public surface is intentionally bounded. It contains reviewer-facing claims and public proof references only; it does not expose the private Refinery repository, private datasets, credentials, or supplier material.</footer>
+</main>
+</body>
+</html>
