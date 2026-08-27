@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Refinery — Cold Review Packet</title>
+  <style>
+    :root { color-scheme:dark; font-family:Inter,ui-sans-serif,system-ui,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#090d13; color:#edf2f7; }
+    main { max-width:820px; margin:0 auto; padding:46px 20px 84px; }
+    a { color:#bfd2ff; }
+    h1 { font-size:clamp(34px,6vw,55px); line-height:1.03; margin:8px 0 12px; }
+    h2 { margin:0 0 8px; }
+    p { line-height:1.6; color:#c7d0dc; }
+    .eyebrow { color:#8e9db4; text-transform:uppercase; letter-spacing:.13em; font-size:12px; }
+    section { margin-top:24px; padding:20px; border:1px solid #27344a; border-radius:14px; background:#101722; }
+    label { display:block; margin:16px 0 6px; font-weight:700; }
+    input,select,textarea { width:100%; padding:11px 12px; border-radius:9px; border:1px solid #384761; background:#0b111a; color:#edf2f7; }
+    textarea { min-height:92px; resize:vertical; }
+    .check { display:flex; gap:10px; align-items:flex-start; font-weight:500; }
+    .check input { width:auto; margin-top:4px; }
+    button { margin-top:20px; padding:12px 16px; border:0; border-radius:10px; font-weight:800; cursor:pointer; }
+    .boundary { font-size:13px; color:#93a0b3; }
+    #status { margin-top:12px; color:#a8d9b7; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Refinery · cold external comprehension</div>
+  <h1>Record what you understood without maintainer help.</h1>
+  <p>Spend no more than five minutes on the <a href="index.html">review surface</a>, then complete this packet. This page performs no network submission. It only downloads a JSON file to your device.</p>
+
+  <form id="reviewForm">
+    <section>
+      <h2>Reviewer context</h2>
+      <label for="role">Role or perspective (optional)</label>
+      <input id="role" autocomplete="off" placeholder="e.g. software engineer, researcher, grant reviewer" />
+      <label for="identity">Name / handle (optional)</label>
+      <input id="identity" autocomplete="off" />
+    </section>
+
+    <section>
+      <h2>Comprehension</h2>
+      <label for="primary">What is Refinery primarily organizing?</label>
+      <select id="primary" required>
+        <option value="">Choose…</option>
+        <option value="capability">Capabilities / behavioral contracts</option>
+        <option value="repository">Repositories</option>
+        <option value="marketplace_listing">Marketplace listings</option>
+        <option value="unclear">Unclear</option>
+      </select>
+      <label class="check"><input id="capImpl" type="checkbox" /> <span>I can explain the difference between a capability and one concrete implementation.</span></label>
+      <label class="check"><input id="verifyRec" type="checkbox" /> <span>I understand that verified evidence does not automatically mean recommended or canonical.</span></label>
+      <label for="summary">Summarize Refinery in one sentence</label>
+      <textarea id="summary" required></textarea>
+      <label for="confidence">Confidence that you understand what it does</label>
+      <select id="confidence" required>
+        <option value="">Choose…</option><option value="1">1 — not confident</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 — very confident</option>
+      </select>
+    </section>
+
+    <section>
+      <h2>Verdict</h2>
+      <label for="overall">Overall cold-review verdict</label>
+      <select id="overall" required>
+        <option value="">Choose…</option><option value="pass">PASS — understandable enough to proceed</option><option value="revise">REVISE — concept is recoverable but needs changes</option><option value="fail">FAIL — I could not reliably understand the object</option><option value="neutral">NEUTRAL — insufficient basis for a stronger verdict</option>
+      </select>
+      <label for="clarity">Clarity</label>
+      <select id="clarity" required>
+        <option value="">Choose…</option><option value="clear">Clear</option><option value="partly_clear">Partly clear</option><option value="confusing">Confusing</option>
+      </select>
+      <label for="usefulness">Does the capability/evidence view look useful?</label>
+      <select id="usefulness" required>
+        <option value="">Choose…</option><option value="useful">Useful</option><option value="uncertain">Uncertain</option><option value="not_useful">Not useful</option>
+      </select>
+      <label class="check"><input id="continue" type="checkbox" /> <span>I would continue exploring or use this for a relevant task.</span></label>
+      <label for="blockers">What blocked or confused you? One item per line.</label>
+      <textarea id="blockers"></textarea>
+      <p class="boundary">Authority boundary: this packet records comprehension and opinion only. It is not an external submission, recommendation, evidence-maturity promotion, reuse authorization, or product-value claim.</p>
+      <button type="submit">Export review packet</button>
+      <div id="status" role="status" aria-live="polite"></div>
+    </section>
+  </form>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  $('reviewForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const packet = {
+      schema_version: 1,
+      review_kind: 'cold_external_comprehension',
+      reviewed_at: new Date().toISOString(),
+      reviewer_role: $('role').value.trim() || null,
+      reviewer_identity: $('identity').value.trim() || null,
+      comprehension: {
+        primary_object: $('primary').value,
+        capability_vs_implementation: $('capImpl').checked,
+        verified_vs_recommended: $('verifyRec').checked,
+        one_sentence_summary: $('summary').value.trim(),
+        confidence_1_to_5: Number($('confidence').value)
+      },
+      verdict: {
+        overall: $('overall').value,
+        clarity: $('clarity').value,
+        usefulness: $('usefulness').value,
+        would_continue: $('continue').checked,
+        blockers: $('blockers').value.split('\n').map(v => v.trim()).filter(Boolean)
+      },
+      authority_boundary: {
+        external_submission: false,
+        recommendation: false,
+        evidence_maturity_change: 'none'
+      }
+    };
+    const blob = new Blob([JSON.stringify(packet, null, 2) + '\n'], {type:'application/json'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `refinery-cold-review-${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    $('status').textContent = 'Packet exported locally. Send the JSON file back to the maintainer if you choose.';
+  });
+</script>
+</body>
+</html>

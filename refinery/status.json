@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "project": "Refinery",
+  "candidate": "2026Q3-closure-v1",
+  "surface": "public_read_only_review",
+  "state": "EXTERNAL_REVIEW_SURFACE_STAGED",
+  "proven": {
+    "frozen_internal_research_baseline": true,
+    "capability_implementation_claim_model": true,
+    "heterogeneous_software_pressure_test": true,
+    "institutional_generalization_case": true,
+    "citation_engine_client_integration": true,
+    "artifact_scoped_anti_laundering_rule": true,
+    "measured_public_build_vs_reuse_control": true,
+    "independent_public_uv_oci_slsa_verification": true
+  },
+  "public_uv_verification": {
+    "artifact": "ghcr.io/astral-sh/uv:0.12.3-python3.13-trixie-slim",
+    "digest": "sha256:5f3c58899cb4ab5b723f81641d6aed08968e6c93f9a84641321ae66ba7103f42",
+    "predicate": "https://slsa.dev/provenance/v1",
+    "verified_attestation_count": 2,
+    "exact_subject_digest_match": true,
+    "independent_run": "https://github.com/Spectating101/citation-engine/actions/runs/32998653995",
+    "validation_pr": "https://github.com/Spectating101/citation-engine/pull/10"
+  },
+  "negative_control": {
+    "standard": "RFC 3986 Section 5.4 reference resolution",
+    "reuse_passed": 42,
+    "rebuild_passed": 42,
+    "accepted_cases": 42,
+    "verdict": "DOWNGRADE_GENERIC_CAPABILITY_NO_REUSE_ADVANTAGE_ESTABLISHED"
+  },
+  "pending": {
+    "private_exact_head_execution": true,
+    "private_refinery_uv_adapter_ingestion": true,
+    "cold_external_reviewer_packet": true,
+    "bounded_outside_use": true,
+    "outside_verdict_or_outcome": true,
+    "owner_or_supplier_authorized_reuse_comparison": true
+  },
+  "boundaries": [
+    "Verified provenance is not software correctness, adoption, recommendation, external value, product-market fit, or reuse permission.",
+    "The public build-vs-reuse comparison is an internal rights-clean control, not a supplier-authorized experiment.",
+    "This reviewer surface exposes no private repository source or private research data.",
+    "A reviewer response records comprehension and opinion only and does not promote evidence maturity or recommendation state."
+  ]
+}
