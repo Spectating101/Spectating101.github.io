@@ -3,7 +3,7 @@
   "project": "Refinery",
   "candidate": "2026Q3-closure-v1",
   "surface": "public_read_only_review",
-  "state": "EXTERNAL_REVIEW_SURFACE_STAGED",
+  "state": "EXTERNAL_REVIEW_SURFACE_PUBLISHED",
   "proven": {
     "frozen_internal_research_baseline": true,
     "capability_implementation_claim_model": true,
@@ -12,6 +12,7 @@
     "citation_engine_client_integration": true,
     "artifact_scoped_anti_laundering_rule": true,
     "measured_public_build_vs_reuse_control": true,
+    "license_authorized_curated_asset_reuse_comparison": true,
     "independent_public_uv_oci_slsa_verification": true
   },
   "public_uv_verification": {
@@ -30,17 +31,37 @@
     "accepted_cases": 42,
     "verdict": "DOWNGRADE_GENERIC_CAPABILITY_NO_REUSE_ADVANTAGE_ESTABLISHED"
   },
+  "license_authorized_reuse": {
+    "asset": "Public Suffix List",
+    "upstream": "publicsuffix/list@e8c9a2b2b2856b6449999dd0ec0d118f364ed0cd",
+    "authorization": "MPL-2.0 list; CC0/public-domain official tests",
+    "direct_owner_contact": false,
+    "official_test_cases": 78,
+    "reuse_passed": 78,
+    "rebuild_passed": 39,
+    "reuse_accuracy": 1.0,
+    "rebuild_accuracy": 0.5,
+    "accuracy_delta": 0.5,
+    "verdict": "AUTHORIZED_CURATED_ASSET_CORRECTNESS_ADVANTAGE_ESTABLISHED",
+    "independent_run": "https://github.com/Spectating101/citation-engine/actions/runs/33058945247",
+    "validation_pr": "https://github.com/Spectating101/citation-engine/pull/11",
+    "result_artifact_zip_sha256": "81d8a45f40442f6b37606e98261069978e478390cb08de438b547281bc030544"
+  },
   "pending": {
     "private_exact_head_execution": true,
     "private_refinery_uv_adapter_ingestion": true,
+    "served_pages_url_independently_verified": true,
     "cold_external_reviewer_packet": true,
     "bounded_outside_use": true,
     "outside_verdict_or_outcome": true,
-    "owner_or_supplier_authorized_reuse_comparison": true
+    "direct_supplier_authorized_residual_asset_comparison": true
   },
   "boundaries": [
-    "Verified provenance is not software correctness, adoption, recommendation, external value, product-market fit, or reuse permission.",
-    "The public build-vs-reuse comparison is an internal rights-clean control, not a supplier-authorized experiment.",
+    "The frozen internal baseline remains unchanged; the PSL experiment is post-baseline evidence.",
+    "The PSL comparison is rights-authorized through published MPL-2.0/CC0 terms, not through direct supplier contact.",
+    "Its 100% versus 50% result proves only a bounded correctness advantage attributable to the pinned curated suffix asset on the official corpus.",
+    "Verified provenance is not software correctness, adoption, recommendation, external value, product-market fit, or reuse permission beyond the applicable license.",
+    "The RFC control remains a negative internal control and is not relabeled as outside-user evidence.",
     "This reviewer surface exposes no private repository source or private research data.",
     "A reviewer response records comprehension and opinion only and does not promote evidence maturity or recommendation state."
   ]
