@@ -1,0 +1,119 @@
+name: Refinery cold review
+about: Return a five-minute external comprehension verdict for the Refinery review surface.
+title: "Refinery cold review: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reviewing Refinery without maintainer interpretation. This issue is public. Do not include private, confidential, identifying, or sensitive information you do not want published.
+
+        Your response records comprehension/opinion only. It does **not** recommend an implementation, promote evidence maturity, authorize reuse, or establish product value.
+
+  - type: input
+    id: role
+    attributes:
+      label: Role or perspective
+      description: Optional. Examples: software engineer, researcher, grant reviewer.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: primary_object
+    attributes:
+      label: What is Refinery primarily organizing?
+      options:
+        - Capabilities / behavioral contracts
+        - Repositories
+        - Marketplace listings
+        - Unclear
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: comprehension
+    attributes:
+      label: Comprehension checks
+      options:
+        - label: I can explain the difference between a capability and one concrete implementation.
+        - label: I understand that verified evidence does not automatically mean recommended or canonical.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: One-sentence summary
+      description: Summarize what you think Refinery does in one sentence.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Confidence
+      options:
+        - 1 — not confident
+        - "2"
+        - "3"
+        - "4"
+        - 5 — very confident
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Overall cold-review verdict
+      options:
+        - PASS — understandable enough to proceed
+        - REVISE — concept is recoverable but needs changes
+        - FAIL — I could not reliably understand the object
+        - NEUTRAL — insufficient basis for a stronger verdict
+    validations:
+      required: true
+
+  - type: dropdown
+    id: clarity
+    attributes:
+      label: Clarity
+      options:
+        - Clear
+        - Partly clear
+        - Confusing
+    validations:
+      required: true
+
+  - type: dropdown
+    id: usefulness
+    attributes:
+      label: Does the capability/evidence view look useful?
+      options:
+        - Useful
+        - Uncertain
+        - Not useful
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: continue
+    attributes:
+      label: Continued use
+      options:
+        - label: I would continue exploring or use this for a relevant task.
+
+  - type: textarea
+    id: blockers
+    attributes:
+      label: What blocked or confused you?
+      description: Leave blank if nothing materially blocked comprehension.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Public evidence boundary
+      options:
+        - label: I understand this issue is public and records only my review/comprehension verdict.
+          required: true
+        - label: I have not included private or sensitive information that should not be public.
+          required: true
