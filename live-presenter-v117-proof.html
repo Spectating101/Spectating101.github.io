@@ -1,0 +1,40 @@
+<!doctype html><meta charset="utf-8"><title>Live Presenter v11.7 — Real Asset Proof</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#080b10;color:#eef2f6}*{box-sizing:border-box}body{margin:0;background:#080b10}.wrap{max-width:1500px;margin:auto;padding:28px}.top{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:24px}.top h1{margin:0;font-size:34px;letter-spacing:-.04em}.top p{margin:8px 0 0;color:#8e99a8;max-width:920px;line-height:1.45}.badge{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#99a5b4;border:1px solid #303946;border-radius:999px;padding:8px 11px;white-space:nowrap}.case{border-top:1px solid #202733;padding:30px 0 38px}.metrics{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}.metric{border:1px solid #2c3541;border-radius:11px;padding:8px 10px;color:#b6c0cc;font-size:12px;background:#0f141b}.metric b{color:#fff}.stage{height:720px;border:1px solid #303844;border-radius:22px;background:#0c1117;overflow:hidden;position:relative;padding:44px 52px}.kicker{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:#788493;margin-bottom:12px}.headline{font-size:clamp(40px,4.4vw,66px);font-weight:840;letter-spacing:-.05em;line-height:.98;margin-bottom:24px;max-width:1300px}.asset-frame{height:545px;border:1px solid #2d3642;border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;background:#0a0f15}.asset-frame.diagram{background:#f7f8fa}.asset-frame img{display:block;width:100%;height:100%;object-fit:contain}.cap{position:absolute;left:0;right:0;bottom:0;padding:50px 18px 16px;background:linear-gradient(transparent,rgba(0,0,0,.88));font-size:12px;color:#f1f4f7}.status{font-size:15px;color:#9aa6b5;padding:80px 30px;text-align:center}.candidate-list{font-size:12px;color:#8f9baa;margin-top:12px;line-height:1.55}.candidate-list b{color:#cbd3dc}.fail{color:#ffb2a7}.source{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#607084;position:absolute;right:20px;bottom:14px;max-width:68%;text-align:right}
+</style>
+<div class="wrap">
+  <div class="top"><div><h1>Real-asset acceptance</h1><p>Each case starts from a semantic query, calls Wikimedia Commons, filters out non-image media, ranks the candidates, waits for the selected image bytes to finish loading, then renders the audience-facing stage. “Ready” here means the browser has the actual image bytes.</p></div><div class="badge">v11.7 browser proof</div></div>
+  <div id="cases"></div>
+</div>
+<script>
+const CASES=[
+ {id:'mit',label:'MIT shuttle replay',query:'Space Shuttle thermal protection system tiles',desired:'photo',headline:'Thermal protection has to survive reentry',kicker:'Orbiter structure · retrieved illustration'},
+ {id:'nist',label:'NIST distillation replay',query:'simple distillation apparatus labelled',desired:'diagram',headline:'How the distillation measurement works',kicker:'Advanced distillation curve · retrieved diagram'}
+];
+const D=['diagram','schematic','labelled','labeled','apparatus','drawing','illustration','cross-section','cross section','svg'];
+function text(v){return String(v||'').replace(/<[^>]*>/g,' ').replace(/_/g,' ').replace(/\s+/g,' ').trim()}
+function toks(v){return new Set((text(v).toLowerCase().match(/[a-z0-9]+/g)||[]).filter(x=>x.length>2))}
+function kind(x){const s=[x.title,x.description,x.mime,x.url].map(text).join(' ').toLowerCase();return D.some(c=>s.includes(c))?'diagram':'photo'}
+function score(q,x,desired){if(!String(x.mime||'').startsWith('image/'))return -1e9;const qt=toks(q),ht=toks(text(x.title)+' '+text(x.description));let n=0;qt.forEach(t=>{if(ht.has(t))n++});let s=n*2;if(kind(x)===desired)s+=4;if(q.toLowerCase().includes('labelled')&&/labelled|labeled/.test(text(x.title).toLowerCase()))s+=3;const lic=text(x.license).toLowerCase();if(/public domain|cc0|cc zero|pd-usgov/.test(lic))s+=1;if(Math.min(+x.width||0,+x.height||0)>=500)s+=.5;return s}
+function esc(s){return text(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function loadCase(c){
+ const host=document.getElementById(c.id); const stage=host.querySelector('.stage'); const metrics=host.querySelector('.metrics'); const cl=host.querySelector('.candidate-list');
+ const t0=performance.now();
+ const params=new URLSearchParams({action:'query',generator:'search',gsrsearch:c.query,gsrnamespace:'6',gsrlimit:'12',prop:'imageinfo',iiprop:'url|mime|size|extmetadata',iiurlwidth:'1280',format:'json',origin:'*'});
+ try{
+  const r=await fetch('https://commons.wikimedia.org/w/api.php?'+params); const raw=await r.json(); const tSearch=performance.now();
+  const pages=Object.values(raw?.query?.pages||{}); let xs=pages.map(p=>{const i=(p.imageinfo||[{}])[0],m=i.extmetadata||{};return {title:p.title||'',url:i.thumburl||i.url||'',original_url:i.url||'',mime:i.mime||'',width:i.thumbwidth||i.width||0,height:i.thumbheight||i.height||0,description:m.ImageDescription?.value||'',license:m.LicenseShortName?.value||'',artist:m.Artist?.value||'',source:'Wikimedia Commons'}}).filter(x=>String(x.mime).startsWith('image/'));
+  xs.forEach(x=>{x.visual_kind=kind(x);x.score=score(c.query,x,c.desired)}); xs.sort((a,b)=>b.score-a.score||((b.width*b.height)-(a.width*a.height))); const chosen=xs[0];
+  if(!chosen||!chosen.url)throw new Error('no image candidate survived filtering');
+  const imageStart=performance.now(); const img=new Image(); img.decoding='async'; img.src=chosen.url; await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(new Error('selected image failed to load'))}); const ready=performance.now();
+  const fit='contain';
+  stage.innerHTML=`<div class="kicker">${esc(c.kicker)}</div><div class="headline">${esc(c.headline)}</div><div class="asset-frame ${chosen.visual_kind}"><img src="${esc(chosen.url)}"><div class="cap">${esc(chosen.title)} · ${esc(chosen.license||'license metadata unavailable')}</div></div><div class="source">Wikimedia Commons · query: ${esc(c.query)}</div>`;
+  metrics.innerHTML=`<span class="metric"><b>${Math.round(tSearch-t0)} ms</b> search</span><span class="metric"><b>${Math.round(ready-imageStart)} ms</b> image bytes</span><span class="metric"><b>${Math.round(ready-t0)} ms</b> search→ready</span><span class="metric"><b>${xs.length}</b> image candidates</span><span class="metric"><b>${chosen.visual_kind}</b> · ${fit}</span><span class="metric"><b>${chosen.width}×${chosen.height}</b> preview</span>`;
+  cl.innerHTML='<b>Top ranked candidates:</b> '+xs.slice(0,4).map((x,i)=>`${i+1}. ${esc(x.title)} (${x.score.toFixed(1)}, ${x.visual_kind})`).join(' · ');
+  host.dataset.ready='true'; host.dataset.searchMs=Math.round(tSearch-t0);host.dataset.imageMs=Math.round(ready-imageStart);host.dataset.totalMs=Math.round(ready-t0);host.dataset.selected=chosen.title;host.dataset.fit=fit;host.dataset.visualKind=chosen.visual_kind;
+ }catch(e){stage.innerHTML=`<div class="status fail">${esc(e.message||e)}</div>`;host.dataset.ready='false';host.dataset.error=text(e.message||e)}
+}
+const root=document.getElementById('cases');
+CASES.forEach(c=>{const el=document.createElement('section');el.className='case';el.id=c.id;el.innerHTML=`<div class="metrics"><span class="metric">retrieving…</span></div><div class="stage"><div class="status">Searching Commons and warming image bytes…</div></div><div class="candidate-list"></div>`;root.appendChild(el)});
+Promise.all(CASES.map(loadCase)).then(()=>{window.__LP_PROOF_READY=true;window.__LP_PROOF=Object.fromEntries(CASES.map(c=>{const e=document.getElementById(c.id);return[c.id,{ready:e.dataset.ready,search_ms:e.dataset.searchMs,image_ms:e.dataset.imageMs,total_ms:e.dataset.totalMs,selected:e.dataset.selected,fit:e.dataset.fit,visual_kind:e.dataset.visualKind,error:e.dataset.error||null}]}));document.title='READY · Live Presenter v11.7';});
+</script>
